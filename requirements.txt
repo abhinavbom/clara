@@ -1,6 +1,5 @@
 certifi==2018.11.29
 chardet==3.0.4
-datadog==0.26.0
 decorator==4.3
 idna==2.8
 requests==2.21
