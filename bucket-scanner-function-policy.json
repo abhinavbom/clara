@@ -1,0 +1,65 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectTagging",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::file-scanning-upload/*"
+            ]
+        },
+        {
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectTagging"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::clamav-definition-updates/*"
+            ]
+        },
+        {
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectTagging"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::yara-rule-updates/*"
+            ]
+        },
+        {
+            "Action": [
+                "kms:Decrypt"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::file-scanning-upload/*"
+            ]
+        },
+        {
+            "Action": [
+                "sns:Publish"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:sns:::<av-scan-start>",
+                "arn:aws:sns:::<av-status>"
+            ]
+        }
+    ]
+}

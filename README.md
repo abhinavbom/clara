@@ -39,7 +39,7 @@ Now we are all set with creating our S3 buckets and assigning the required acces
 
 1. Proceed to your AWS Lambda dashboard UI and create a new lambda fuction. Select "From scratch" to define our own parameters. 
 
-2. Name the function as ```bucket-defs-update``` and select the runtime as ```Python 3.7```.
+2. Name the function as ```bucket-defs-update``` and select the runtime as **Python 3.7**.
 
 3. In the Designer tab, click on the left side "Add trigger" option. Select ```CloudWatch Events``` and then add ```rate(3 hours)``` for **Scheduled expression**. Make sure that **enable trigger** option is selected. Save it. 
 
@@ -63,4 +63,24 @@ YARA_RULES_S3_BUCKET            yara-rule-updates
 
 
 ## Step 4
-* AWS scanner lambda 
+* Creating the scanner lambda function
+
+1. Create a new lambda function and name it as ```bucket-scanner-function```. Select the runtime environment as **Python 3.7**.
+
+2. In the Designer tab, add a new trigger and select **S3 Event**. 
+
+3. Select your bucket name where the scanning files will be uploaded. In this example we have named it as ```file-scanning-upload```. In the **Event Type** select **All object create event**. Make sure that enable trigger is configured. Then click on Add. 
+
+4. In the **Function code** section slect the zip file created in Step 1. Set Python3.7 as the runtime environment. Set the value of **Handler** as ```scan.lambda_handler```. 
+
+5. Define the below two environment variable key values: 
+AV_DEFINITION_S3_BUCKET     clamav-definition-updates
+YARA_RULES_S3_BUCKET        yara-rule-updates
+
+6. For the **Execution Role**, create a new role and name it as ```bucket-scanner-function```. Select **Attach Policy** and create a new policy. You can again name the policy as above. Copy-paste the ```bucket-scanner-function-policy.json``` into the JSON editor of the policy and save it. 
+
+7. Go back to the lambda function creation dashboard. In the **Execution role**, select **use an existing role** and choose the newly created role. 
+
+8. In the **Basic settings**, set the memory to 2048MB and timeout as 3 minutes. Save the lambda function. 
+
+
