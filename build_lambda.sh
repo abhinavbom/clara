@@ -2,8 +2,6 @@
 # 06/23/2019 - Adding new feature that creates Yara scanning lambda fucntion
 #author: Abhinav Singh
 
-# Upside Travel, Inc.
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at

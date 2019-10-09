@@ -1,5 +1,6 @@
 # 06/23/2019 - Adding new feature to update bucket containing Rara rules for scanning.
 #author: Abhinav Singh
+#pre-update
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
