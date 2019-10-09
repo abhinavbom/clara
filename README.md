@@ -1,4 +1,4 @@
-# clara
+# Clara
 Serverless, real-time, ClamAV+Yara scanning for your S3 Buckets
 
 ## What is clara
