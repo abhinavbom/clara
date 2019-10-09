@@ -83,4 +83,17 @@ YARA_RULES_S3_BUCKET        yara-rule-updates
 
 8. In the **Basic settings**, set the memory to 2048MB and timeout as 3 minutes. Save the lambda function. 
 
+## Step 5
+
+### Testing the Lambda functions
+
+1. Click on Test functions and let it run with the default values. 
+
+2. Come back to your lambda function page. You should now have two functions created. Click on the ```bucket-defs-update``` function to launch its UI. Select the monitoring tab and you should see the graph with execution of test event details. 
+
+3. You can click on **View Logs in CloudWatch** to see the log lines created by the lambda function. You should see print lines about definitions and rules getting updated. 
+
+2. Go to your S3 bucket ```file-scanning-upload``` and add a new file there. 
+
+3. Now, open the monitoring page of the ```bucket-scanner-function```. Select **View logs in CloudWatch**. You should see the scanning getting initiated. If there is a detection, it should print in the log line. 
 
