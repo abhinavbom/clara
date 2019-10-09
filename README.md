@@ -3,7 +3,7 @@ Serverless, real-time, ClamAV+Yara scanning for your S3 Buckets
 
 ## What is clara
 Clara is Python based project used to scan your S3 bucket files with ClamAV and Yara signatures.
-It is built on top of Upside Travel's [bucket-antivirus-function](https://github.com/TheToddLuci0/bucket-antivirus-function) project and Airbnb's (BinaryAlert)[https://github.com/airbnb/binaryalert] project. *Clara* combines the two functionalities into a single project with some additional improvements:
+It is built on top of Upside Travel's [bucket-antivirus-function](https://github.com/upsidetravel/bucket-antivirus-function) project and Airbnb's (BinaryAlert)[https://github.com/airbnb/binaryalert] project. *Clara* combines the two functionalities into a single project with some additional improvements:
 * Yara and ClamAV Scanning feature with signature updates.
 * Slack/Email SNS alerts.
 * DynamoDB storage support.
@@ -102,5 +102,5 @@ YARA_RULES_S3_BUCKET        yara-rule-updates
 
 ## Acknowledgements
 
-* [Bucket-antivirus-fuction](https://github.com/TheToddLuci0/bucket-antivirus-function)
+* [Bucket-antivirus-fuction](https://github.com/upsidetravel/bucket-antivirus-function)
 * [Binary Alert](https://github.com/airbnb/binaryalert)
