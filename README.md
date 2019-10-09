@@ -3,8 +3,10 @@ ClamAV+Yara scanning your S3 Buckets
 
 ## What is clara
 Clara is Python based project used to scan your S3 bucket files with ClamAV and Yara signatures.
-It is built on top of Upside Travel's bucket-antivirus-function project and extends it to following improvements:
+It is built on top of Upside Travel's [bucket-antivirus-function](https://github.com/TheToddLuci0/bucket-antivirus-function) project and extends it to following improvements:
 * Yara Scanning feature with signature updates.
+* Slack/Email SNS alerts.
+* DynamoDB storage support.
 * Python 3.7 support.
 
 ## Setup:
