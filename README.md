@@ -35,3 +35,32 @@ Now we are all set with creating our S3 buckets and assigning the required acces
 
 
 ### Step 3: 
+* Creating the rules and definition update Lambda function
+
+1. Proceed to your AWS Lambda dashboard UI and create a new lambda fuction. Select "From scratch" to define our own parameters. 
+
+2. Name the function as ```bucket-defs-update``` and select the runtime as ```Python 3.7```.
+
+3. In the Designer tab, click on the left side "Add trigger" option. Select ```CloudWatch Events``` and then add ```rate(3 hours)``` for **Scheduled expression**. Make sure that **enable trigger** option is selected. Save it. 
+
+4. In the Function code section, select "upload from zip file" and select the Build.zip file that we created in step 1. Again, select the runtime as Python 3.7. In the Handler field add ```update.lambda_handler```.
+
+5. In the environment variables field, we will have to provide the bucket names where our ClamAV and Yara rules recide. Define the following key and value in this field: 
+Key                             Value
+AV_DEFINITION_S3_BUCKET         clamav-definition-updates
+YARA_RULES_S3_BUCKET            yara-rule-updates
+
+6. For the Execution role section, we will have to create a new role to be attached to our lambda function. Head to your IAM dashboard, Click on "Roles" and "create new role". 
+    i. Name your role as ```bucket-defs-update```. 
+    ii. Click on "Attach policies" and then create a new policy. 
+    iii. Copy-paste the json policy from ```bucket-defs-update-policy.json``` and save it. Once the policy is attached to the role, go back to your Lambda creation page and scroll to the "Execution Role" section.
+
+7. In the "Execution role" section, select "Use an existing role" and select the newly created role. You might want to click on the Refresh button for your role to reflect. 
+
+8. In the "Basic Settings", select 512MB memory and Timout as 3 minutes. 
+
+9. (Optional) Choose the VPC where you want to add your lambda function.
+
+
+## Step 4
+* AWS scanner lambda 
