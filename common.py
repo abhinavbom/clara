@@ -37,6 +37,7 @@ AV_DELETE_INFECTED_FILES = os.getenv("AV_DELETE_INFECTED_FILES", "False")
 YARA_RULES_S3_BUCKET = os.getenv("YARA_RULES_S3_BUCKET")
 YARA_RULES_S3_PREFIX = os.getenv("YARA_RULES_S3_PREFIX", "yara_rules")
 YARA_DEFINITION_PATH = os.getenv("YARA_DEFINITION_PATH", "/tmp/yara_rules")
+YARA_LIB_PATH = os.getenv("YARA_LIB_PATH", "./bin")
 YARASCAN_PATH = os.getenv("YARASCAN_PATH", "./bin/yara")
 AV_DEFINITION_FILENAMES = ["main.cvd", "daily.cvd", "daily.cud", "bytecode.cvd", "bytecode.cud"]
 
