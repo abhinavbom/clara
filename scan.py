@@ -157,6 +157,12 @@ def sns_scan_results(s3_object, result):
         }
     )
 
+def slack_notification(result):
+    webhook_url = 'ENTER YOUR WEBHOOK URL'
+    response = requests.post(webhook_url, json={'text': result})
+    http_reply = {"statusCode": 200, "body": response.text}
+    return http_reply
+    
 
 def lambda_handler(event, context):
     start_time = datetime.utcnow()
@@ -168,6 +174,7 @@ def lambda_handler(event, context):
     file_path = download_s3_object(s3_object, "/tmp")
     clamav.update_defs_from_s3(AV_DEFINITION_S3_BUCKET, AV_DEFINITION_S3_PREFIX)
     scan_result = clamav.scan_file(file_path)
+    slack_notification(scan_result)
     print("yara scanning to begin")
     yarascan.update_sigs_from_s3(YARA_RULES_S3_BUCKET, YARA_RULES_S3_PREFIX)
     scan_result_yara = yarascan.scan_file(file_path)
