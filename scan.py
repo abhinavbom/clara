@@ -1,29 +1,16 @@
-# 06/23/2019 - Adding new feature to Scan uploaded files against set of Yara signatures uploaded on s3 bucket.
-#author: Abhinav Singh
-#pre-update
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import boto3
 import clamav
 import yarascan
 import copy
 import json
-import metrics
+import fsf_client
 from urllib.parse import unquote_plus
 from common import *
 from datetime import datetime
 from distutils.util import strtobool
 import sys
+import os
+from botocore.vendored import requests
 
 ENV = os.getenv("ENV", "")
 EVENT_SOURCE = os.getenv("EVENT_SOURCE", "S3")
@@ -156,7 +143,7 @@ def sns_scan_results(s3_object, result):
     )
 
 def slack_notification(result):
-    webhook_url = 'ENTER YOUR WEBHOOK URL'
+    webhook_url = 'https://hooks.slack.com/services/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'
     response = requests.post(webhook_url, json={'text': result})
     http_reply = {"statusCode": 200, "body": response.text}
     return http_reply
@@ -177,12 +164,19 @@ def lambda_handler(event, context):
     yarascan.update_sigs_from_s3(YARA_RULES_S3_BUCKET, YARA_RULES_S3_PREFIX)
     scan_result_yara = yarascan.scan_file(file_path)
     print(scan_result_yara)
+    lambda_result = {"clamav": "Detected", "yara": "Dummrule1.yara"}
+    with open(file_path, 'rb') as f:
+        filename = os.path.basename(file_path)
+        print("sending control to fsf")
+        fsf = fsf_client.FSFClient(file_path, f.name, False, 'Analyst', False, False, False, f.read(), lambda_result)
+        print("initiating submission")
+        print(fsf.initiate_submission())
     print("Scan of s3://%s resulted in %s\n" % (os.path.join(s3_object.bucket_name, s3_object.key), scan_result))
     if "AV_UPDATE_METADATA" in os.environ:
         set_av_metadata(s3_object, scan_result)
     set_av_tags(s3_object, scan_result)
     sns_scan_results(s3_object, scan_result)
-    metrics.send(env=ENV, bucket=s3_object.bucket_name, key=s3_object.key, status=scan_result)
+    #metrics.send(env=ENV, bucket=s3_object.bucket_name, key=s3_object.key, status=scan_result)
     # Delete downloaded file to free up room on re-usable lambda function container
     try:
         os.remove(file_path)

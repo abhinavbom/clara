@@ -2,18 +2,6 @@
 # 06/23/2019 - Adding new feature that creates Yara scanning lambda fucntion
 #author: Abhinav Singh
 
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 lambda_output_file=/opt/app/build/lambda.zip
 
 set -e
@@ -46,5 +34,6 @@ cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/bin/yara /tmp/usr/bin/y
 echo "DatabaseMirror database.clamav.net" > bin/freshclam.conf
 mkdir -p build
 zip -r9 $lambda_output_file *.py bin
+zip -r9 $lambda_output_file conf/ bin/.
 cd env/lib/python3.7/site-packages
 zip -r9 $lambda_output_file *
