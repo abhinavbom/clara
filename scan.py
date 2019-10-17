@@ -153,9 +153,9 @@ def lambda_handler(event, context):
     start_time = datetime.utcnow()
     print("Script starting at %s\n" %
           (start_time.strftime("%Y/%m/%d %H:%M:%S UTC")))    
-    s3_object = event_object(event)
+    '''s3_object = event_object(event)
     verify_s3_object_version(s3_object)
-    sns_start_scan(s3_object)
+    sns_start_scan(s3_object)'''
     file_path = download_s3_object(s3_object, "/tmp")
     clamav.update_defs_from_s3(AV_DEFINITION_S3_BUCKET, AV_DEFINITION_S3_PREFIX)
     scan_result = clamav.scan_file(file_path)
