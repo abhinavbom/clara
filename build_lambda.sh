@@ -10,7 +10,8 @@ yum update -y
 yum install -y cpio python3-pip yum-utils zip
 yum -y install gcc openssl-devel bzip2-devel libffi-devel
 yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-yum install https://www.rpmfind.net/linux/epel/7/x86_64/Packages/y/yara-3.8.1-1.el7.x86_64.rpm
+#yum install https://www.rpmfind.net/linux/epel/7/x86_64/Packages/y/yara-3.8.1-1.el7.x86_64.rpm
+yum install -y http://download-ib01.fedoraproject.org/pub/epel/testing/7/x86_64/Packages/y/yara-3.11.0-1.el7.x86_64.rpm
 yum install -y python3-devel.x86_64
 
 pip3 install --no-cache-dir virtualenv
