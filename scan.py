@@ -1,3 +1,18 @@
+# 06/23/2019 - Adding new feature to Scan uploaded files against set of Yara signatures uploaded on s3 bucket.
+#author: Abhinav Singh
+#pre-update
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import boto3
 import clamav
 import yarascan
@@ -143,7 +158,7 @@ def sns_scan_results(s3_object, result):
     )
 
 def slack_notification(result):
-    webhook_url = 'https://hooks.slack.com/services/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'
+    webhook_url = 'https://hooks.slack.com/services/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'
     response = requests.post(webhook_url, json={'text': result})
     http_reply = {"statusCode": 200, "body": response.text}
     return http_reply
@@ -153,9 +168,9 @@ def lambda_handler(event, context):
     start_time = datetime.utcnow()
     print("Script starting at %s\n" %
           (start_time.strftime("%Y/%m/%d %H:%M:%S UTC")))    
-    '''s3_object = event_object(event)
+    s3_object = event_object(event)
     verify_s3_object_version(s3_object)
-    sns_start_scan(s3_object)'''
+    sns_start_scan(s3_object)
     file_path = download_s3_object(s3_object, "/tmp")
     clamav.update_defs_from_s3(AV_DEFINITION_S3_BUCKET, AV_DEFINITION_S3_PREFIX)
     scan_result = clamav.scan_file(file_path)
