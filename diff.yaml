@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Metadata:
+    Generator: "former2"
+Description: ""
+Resources:
+    LambdaFunction:
+        Type: "AWS::Lambda::Function"
+        Properties:
+            Description: ""
+            FunctionName: "bucket-scan-function"
+            Handler: "scan.lambda_handler"
+            Code:
+                S3Bucket: "aws-jam-challenge-resources-010"
+                S3Key: "malware-in-your-bucket/lambda.zip"
+            MemorySize: 128
+            Role: !GetAtt IAMRole.Arn
+            Runtime: "python3.7"
+            Timeout: 3
+            TracingConfig:
+                Mode: "PassThrough"
+
+    S3Bucket:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: !Join
+          - "-"
+          - - "file-scanning-upload"
+            - !Select
+              - 0
+              - !Split
+                - "-"
+                - !Select
+                  - 2
+                  - !Split
+                    - "/"
+                    - !Ref "AWS::StackId"
+
+    IAMRole:
+        Type: "AWS::IAM::Role"
+        Properties:
+            Path: "/"
+            RoleName: "BucketScan3"
+            AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+            MaxSessionDuration: 3600
+            ManagedPolicyArns:
+              - !Ref IAMManagedPolicy
+            Description: "Allows Lambda functions to call AWS services on your behalf."
+
+    IAMManagedPolicy:
+        Type: "AWS::IAM::ManagedPolicy"
+        Properties:
+            ManagedPolicyName: "bucket-scan-policy-2"
+            Path: "/"
+            PolicyDocument: |
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "VisualEditor0",
+                            "Effect": "Allow",
+                            "Action": [
+                                "s3:GetObject",
+                                "sns:Publish",
+                                "kms:Decrypt",
+                                "s3:PutObjectVersionTagging",
+                                "s3:GetObjectTagging",
+                                "s3:PutObjectTagging"
+                            ],
+                            "Resource": [
+                                "arn:aws:sns:::<av-scan-start>",
+                                "arn:aws:sns:::<av-status>",
+                                "arn:aws:s3:::{$S3Bucket}/*"
+                            ]
+                        },
+                        {
+                            "Sid": "VisualEditor1",
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogStream",
+                                "logs:CreateLogGroup",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Sid": "VisualEditor2",
+                            "Effect": "Allow",
+                            "Action": "s3:*",
+                            "Resource": "arn:aws:s3:::yara-rules/*"
+                        },
+                        {
+                            "Sid": "VisualEditor3",
+                            "Effect": "Allow",
+                            "Action": "s3:*",
+                            "Resource": "arn:aws:s3:::{$S3Bucket}/*"
+                        },
+                        {
+                            "Sid": "VisualEditor9",
+                            "Effect": "Allow",
+                            "Action": "s3:*",
+                            "Resource": "arn:aws:s3:::{$S3Bucket}"
+                        },
+                        {
+                            "Sid": "VisualEditor4",
+                            "Effect": "Allow",
+                            "Action": "s3:*",
+                            "Resource": "arn:aws:s3:::yara-rules"
+                        }
+                    ]
+                }
+
