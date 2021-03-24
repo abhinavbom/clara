@@ -11,7 +11,9 @@ yum install -y cpio python3-pip yum-utils zip
 yum -y install gcc openssl-devel bzip2-devel libffi-devel
 yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 #yum install https://www.rpmfind.net/linux/epel/7/x86_64/Packages/y/yara-3.8.1-1.el7.x86_64.rpm
-yum install -y http://download-ib01.fedoraproject.org/pub/epel/testing/7/x86_64/Packages/y/yara-3.11.0-1.el7.x86_64.rpm
+#yum install -y http://download-ib01.fedoraproject.org/pub/epel/testing/7/x86_64/Packages/y/yara-3.11.0-1.el7.x86_64.rpm
+yum install -y https://download-ib01.fedoraproject.org/pub/epel/8/Everything/x86_64/Packages/y/yara-3.11.0-1.el8.x86_64.rpm
+
 yum install -y python3-devel.x86_64
 
 pip3 install --no-cache-dir virtualenv
@@ -22,13 +24,25 @@ virtualenv env
 pip3 install --no-cache-dir -r requirements.txt
 
 pushd /tmp
-yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 yara
+#yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 yara
+yumdownloader -x \*i686 --archlist=x86_64 clamav clamav-lib clamav-update json-c pcre2 libtool-ltdl bzip2-libs libprelude gnutls libtasn1 nettle lib64nettle yara
+
+
 rpm2cpio clamav-0*.rpm | cpio -idmv
 rpm2cpio clamav-lib*.rpm | cpio -idmv
 rpm2cpio clamav-update*.rpm | cpio -idmv
 rpm2cpio json-c*.rpm | cpio -idmv
 rpm2cpio pcre*.rpm | cpio -idmv
 rpm2cpio yara*.rpm | cpio -idmv
+rpm2cpio libtool-ltdl*.rpm | cpio -idmv
+rpm2cpio bzip2-libs-*.rpm | cpio -idmv
+rpm2cpio libprelude-*.rpm | cpio -idmv
+rpm2cpio gnutls-*.rpm | cpio -idmv
+rpm2cpio libtasn1-*.rpm | cpio -idmv
+rpm2cpio nettle-*.rpm | cpio -idmv
+rpm2cpio lib* | cpio -idmv
+rpm2cpio *.rpm | cpio -idmv
+
 popd
 mkdir -p bin
 cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/bin/yara /tmp/usr/bin/yarac /tmp/usr/lib64/* bin/.
