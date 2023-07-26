@@ -1,4 +1,4 @@
-certifi==2018.11.29
+certifi==2023.7.22
 chardet==3.0.4
 decorator==4.3
 idna==2.8
