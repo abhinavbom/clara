@@ -117,7 +117,8 @@ def scan_file(path):
     if av_proc.returncode == 0:
         return AV_STATUS_CLEAN
     elif av_proc.returncode == 1:
-        return AV_STATUS_INFECTED
+        str1 = re.search(r'^(.+?): (.+?) \((.+?)\)$', output.decode('utf-8'))
+        return str1.group(2) if str1 else AV_STATUS_INFECTED
     else:
         msg = "Unexpected exit code from clamscan: %s.\n" % av_proc.returncode
         print(msg)
